@@ -1,0 +1,5 @@
+% layout 'default';
+% title 'Welcome';
+<h2><%= $msg %></h2>
+This is currently under development. Please check after some time.
+<a href="<%== url_for %>">click here</a> to reload the page

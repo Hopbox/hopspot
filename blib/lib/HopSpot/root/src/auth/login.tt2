@@ -1,0 +1,26 @@
+<div class="container">
+
+      <form class="form-signin" role="form" method="POST" action="[% submit_url %]">
+		<input type="hidden" name="gw_id" value="[% gw_id %]"/>
+		<input type="hidden" name="gw_port" value=[% gw_port %]/>
+		<input type="hidden" name="gw_address" value="[% gw_address %]"/>
+		<input type="hidden" name="mac" value="[% mac %]"/>
+		<input type="hidden" name="url" value="[% url %]"/>
+
+        <h2 class="form-signin-heading">Please Login First</h2>
+		<p>Enter your mobile number and we will SMS you a code for login to the WiFi.</p>
+        <input type="number" name="mobile" class="form-control" placeholder="Your Mobile" required autofocus>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me" required> I agree to the Terms & Conditions 
+          </label>
+        </div>
+        <button class="btn btn-2g btn-primary btn-block" type="submit">Send SMS</button>
+      </form>
+
+</div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->

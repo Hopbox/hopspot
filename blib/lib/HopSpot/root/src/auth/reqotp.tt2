@@ -1,0 +1,29 @@
+<div class="container">
+
+      <form class="form-signin" role="form" method="POST" action="[% submit_url %]">
+		<input type="hidden" name="gw_id" value="[% gw_id %]"/>
+		<input type="hidden" name="gw_port" value=[% gw_port %]/>
+		<input type="hidden" name="gw_address" value="[% gw_address %]"/>
+		<input type="hidden" name="mac" value="[% mac %]"/>
+		<input type="hidden" name="url" value="[% url %]"/>
+		<input type="hidden" name="retry" value="[% retry %]"/>
+		<input type="hidden" name="mobile" value="[% mobile %]"/>
+
+        <h2 class="form-signin-heading">Please Enter OTP</h2>
+		<p>We sent you a One Time Passsword on your mobile [% mobile %]</p>
+		<p>[% msg %]</p>
+		<input type="number" name="otp" class="form-control" required autofocus>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me" required> I agree to the Terms & Conditions 
+          </label>
+        </div>
+        <button class="btn btn-2g btn-primary btn-block" type="submit">Get me access!</button>
+      </form>
+
+</div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->

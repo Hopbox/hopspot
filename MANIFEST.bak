@@ -1,5 +1,4 @@
 Changes
-HopSpot-0.02.tar.gz
 hopspot.conf
 hopspot.psgi
 inc/File/Copy/Recursive.pm
@@ -22,11 +21,6 @@ lib/HopSpot/Controller/Login.pm
 lib/HopSpot/Controller/Ping.pm
 lib/HopSpot/Controller/Portal.pm
 lib/HopSpot/Controller/Root.pm
-lib/HopSpot/Model/PgDB.pm
-lib/HopSpot/Schema/PgDB.pm
-lib/HopSpot/Schema/PgDB/Result/Node.pm
-lib/HopSpot/Schema/PgDB/Result/Session.pm
-lib/HopSpot/Schema/PgDB/Result/User.pm
 lib/HopSpot/View/HTML.pm
 Makefile.PL
 MANIFEST			This list of files
@@ -58,14 +52,7 @@ root/static/css/bootstrap-theme.min.css
 root/static/css/bootstrap.css
 root/static/css/bootstrap.css.map
 root/static/css/bootstrap.min.css
-root/static/css/font-awesome.css
-root/static/css/font-awesome.min.css
 root/static/css/signin.css
-root/static/fonts/fontawesome-webfont.eot
-root/static/fonts/fontawesome-webfont.svg
-root/static/fonts/fontawesome-webfont.ttf
-root/static/fonts/fontawesome-webfont.woff
-root/static/fonts/FontAwesome.otf
 root/static/fonts/glyphicons-halflings-regular.eot
 root/static/fonts/glyphicons-halflings-regular.svg
 root/static/fonts/glyphicons-halflings-regular.ttf
@@ -79,7 +66,6 @@ root/static/images/btn_88x31_built_shadow.png
 root/static/images/btn_88x31_powered.png
 root/static/images/btn_88x31_powered_shadow.png
 root/static/images/catalyst_logo.png
-root/static/images/logo.png
 root/static/js/bootstrap.js
 root/static/js/bootstrap.min.js
 root/static/js/html5shiv.min.js
@@ -100,6 +86,3 @@ t/controller_Ping.t
 t/controller_Portal.t
 t/controller_Potal.t
 t/controller_Protal.t
-t/model_DBIC.t
-t/model_HopSpot-PgDB.t
-t/model_PgDB.t

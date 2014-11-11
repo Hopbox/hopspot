@@ -12,10 +12,11 @@
         <input type="number" name="mobile" class="form-control" placeholder="Your Mobile" required autofocus>
         <div class="checkbox">
           <label>
-            <input type="checkbox" value="remember-me" required> I agree to the Terms & Conditions 
+           <!-- <input type="checkbox" class="checkbox" value="remember-me" required> -->
+		<span> By clicking below you agree to our terms and conditions</span>
           </label>
-        </div>
-        <button class="btn btn-2g btn-primary btn-block" type="submit">Send SMS</button>
+        </div> 
+	<button class="btn btn-2g btn-primary btn-block" type="submit">Send SMS</button>
       </form>
 
 </div> <!-- /container -->

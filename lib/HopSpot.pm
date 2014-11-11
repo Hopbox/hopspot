@@ -29,7 +29,7 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 # Configure the application.
 #
@@ -45,13 +45,13 @@ __PACKAGE__->config(
 
 	## Configure Cache_FastMmap
 	cache => {
-		storage => '/tmp/hopspot_otp_cache_1',
+		storage => '/tmp/hopspot_otp_cache_3',
 		xpires	=> 300,
 	},
 
 	'Plugin::Session' => {
 		expires	=> 900,
-		storage => '/tmp/hopspot_session_1',
+		storage => '/tmp/hopspot_session_3',
 	},
 
     # Disable deprecated behavior needed by old applications

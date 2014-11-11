@@ -38,17 +38,10 @@ __PACKAGE__->table("sessions");
 
 =head1 ACCESSORS
 
-=head2 id
-
-  data_type: 'integer'
-  is_auto_increment: 1
-  is_nullable: 0
-  sequence: 'sessions_id_seq'
-
 =head2 token
 
   data_type: 'text'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 mac
 
@@ -66,12 +59,22 @@ __PACKAGE__->table("sessions");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 gw_name
+
+  data_type: 'text'
+  is_nullable: 1
+
 =head2 mobile
 
   data_type: 'integer'
   is_nullable: 1
 
 =head2 status
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 stage
 
   data_type: 'text'
   is_nullable: 1
@@ -101,24 +104,21 @@ __PACKAGE__->table("sessions");
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
-  {
-    data_type         => "integer",
-    is_auto_increment => 1,
-    is_nullable       => 0,
-    sequence          => "sessions_id_seq",
-  },
   "token",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 0 },
   "mac",
   { data_type => "text", is_nullable => 1 },
   "ip",
   { data_type => "text", is_nullable => 1 },
   "gw_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "gw_name",
+  { data_type => "text", is_nullable => 1 },
   "mobile",
   { data_type => "integer", is_nullable => 1 },
   "status",
+  { data_type => "text", is_nullable => 1 },
+  "stage",
   { data_type => "text", is_nullable => 1 },
   "in_bytes",
   { data_type => "integer", is_nullable => 1 },
@@ -139,13 +139,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</id>
+=item * L</token>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("id");
+__PACKAGE__->set_primary_key("token");
 
 =head1 RELATIONS
 
@@ -153,13 +153,13 @@ __PACKAGE__->set_primary_key("id");
 
 Type: belongs_to
 
-Related object: L<HopSpot::Schema::PgDB::Result::Node>
+Related object: L<HopSpot::Schema::PgDB::Result::Gwcontroller>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "gw",
-  "HopSpot::Schema::PgDB::Result::Node",
+  "HopSpot::Schema::PgDB::Result::Gwcontroller",
   { id => "gw_id" },
   {
     is_deferrable => 0,
@@ -170,8 +170,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-11-11 11:23:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MJdqchOd/y70ONrylFVRZQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-11-11 20:35:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ejafIhPZPku07XgN9byFuA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

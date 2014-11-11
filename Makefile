@@ -20,13 +20,13 @@
 #     LICENSE => q[perl]
 #     NAME => q[HopSpot]
 #     NO_META => q[1]
-#     PREREQ_PM => { namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], ExtUtils::MakeMaker=>q[6.36], Catalyst::Plugin::ConfigLoader=>q[0], Catalyst::Action::RenderView=>q[0], Test::More=>q[0.88], Config::General=>q[0], Catalyst::Runtime=>q[5.90071], Moose=>q[0] }
+#     PREREQ_PM => { namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], ExtUtils::MakeMaker=>q[6.36], Catalyst::Plugin::ConfigLoader=>q[0], Catalyst::Action::RenderView=>q[0], Test::More=>q[0.88], Config::General=>q[0], Catalyst::Runtime=>q[5.90071], Moose=>q[0], DateTime::Format::Pg=>q[0] }
 #     TEST_REQUIRES => {  }
-#     VERSION => q[0.01]
+#     VERSION => q[0.02]
 #     VERSION_FROM => q[lib/HopSpot.pm]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
-#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_Auth.t t/controller_Login.t t/controller_Ping.t t/controller_Portal.t t/controller_Potal.t t/controller_Protal.t] }
+#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_Auth.t t/controller_Login.t t/controller_Ping.t t/controller_Portal.t t/controller_Potal.t t/controller_Protal.t t/model_DBIC.t t/model_HopSpot-PgDB.t t/model_PgDB.t] }
 
 # --- MakeMaker post_initialize section:
 
@@ -65,11 +65,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = HopSpot
 NAME_SYM = HopSpot
-VERSION = 0.01
+VERSION = 0.02
 VERSION_MACRO = VERSION
-VERSION_SYM = 0_01
+VERSION_SYM = 0_02
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 0.01
+XS_VERSION = 0.02
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -179,6 +179,10 @@ MAN3PODS = lib/HopSpot.pm \
 	lib/HopSpot/Controller/Ping.pm \
 	lib/HopSpot/Controller/Portal.pm \
 	lib/HopSpot/Controller/Root.pm \
+	lib/HopSpot/Model/PgDB.pm \
+	lib/HopSpot/Schema/PgDB/Result/Node.pm \
+	lib/HopSpot/Schema/PgDB/Result/Session.pm \
+	lib/HopSpot/Schema/PgDB/Result/User.pm \
 	lib/HopSpot/View/HTML.pm
 
 # Where is the Config information that we are using/depend on
@@ -207,6 +211,11 @@ TO_INST_PM = lib/HopSpot.pm \
 	lib/HopSpot/Controller/Ping.pm \
 	lib/HopSpot/Controller/Portal.pm \
 	lib/HopSpot/Controller/Root.pm \
+	lib/HopSpot/Model/PgDB.pm \
+	lib/HopSpot/Schema/PgDB.pm \
+	lib/HopSpot/Schema/PgDB/Result/Node.pm \
+	lib/HopSpot/Schema/PgDB/Result/Session.pm \
+	lib/HopSpot/Schema/PgDB/Result/User.pm \
 	lib/HopSpot/View/HTML.pm
 
 PM_TO_BLIB = lib/HopSpot.pm \
@@ -221,6 +230,16 @@ PM_TO_BLIB = lib/HopSpot.pm \
 	blib/lib/HopSpot/Controller/Portal.pm \
 	lib/HopSpot/Controller/Root.pm \
 	blib/lib/HopSpot/Controller/Root.pm \
+	lib/HopSpot/Model/PgDB.pm \
+	blib/lib/HopSpot/Model/PgDB.pm \
+	lib/HopSpot/Schema/PgDB.pm \
+	blib/lib/HopSpot/Schema/PgDB.pm \
+	lib/HopSpot/Schema/PgDB/Result/Node.pm \
+	blib/lib/HopSpot/Schema/PgDB/Result/Node.pm \
+	lib/HopSpot/Schema/PgDB/Result/Session.pm \
+	blib/lib/HopSpot/Schema/PgDB/Result/Session.pm \
+	lib/HopSpot/Schema/PgDB/Result/User.pm \
+	blib/lib/HopSpot/Schema/PgDB/Result/User.pm \
 	lib/HopSpot/View/HTML.pm \
 	blib/lib/HopSpot/View/HTML.pm
 
@@ -292,7 +311,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = HopSpot
-DISTVNAME = HopSpot-0.01
+DISTVNAME = HopSpot-0.02
 
 
 # --- MakeMaker macro section:
@@ -451,6 +470,10 @@ manifypods : pure_all  \
 	lib/HopSpot/Controller/Ping.pm \
 	lib/HopSpot/Controller/Portal.pm \
 	lib/HopSpot/Controller/Root.pm \
+	lib/HopSpot/Model/PgDB.pm \
+	lib/HopSpot/Schema/PgDB/Result/Node.pm \
+	lib/HopSpot/Schema/PgDB/Result/Session.pm \
+	lib/HopSpot/Schema/PgDB/Result/User.pm \
 	lib/HopSpot/View/HTML.pm \
 	script/hopspot_cgi.pl \
 	script/hopspot_create.pl \
@@ -470,6 +493,10 @@ manifypods : pure_all  \
 	  lib/HopSpot/Controller/Ping.pm $(INST_MAN3DIR)/HopSpot::Controller::Ping.$(MAN3EXT) \
 	  lib/HopSpot/Controller/Portal.pm $(INST_MAN3DIR)/HopSpot::Controller::Portal.$(MAN3EXT) \
 	  lib/HopSpot/Controller/Root.pm $(INST_MAN3DIR)/HopSpot::Controller::Root.$(MAN3EXT) \
+	  lib/HopSpot/Model/PgDB.pm $(INST_MAN3DIR)/HopSpot::Model::PgDB.$(MAN3EXT) \
+	  lib/HopSpot/Schema/PgDB/Result/Node.pm $(INST_MAN3DIR)/HopSpot::Schema::PgDB::Result::Node.$(MAN3EXT) \
+	  lib/HopSpot/Schema/PgDB/Result/Session.pm $(INST_MAN3DIR)/HopSpot::Schema::PgDB::Result::Session.$(MAN3EXT) \
+	  lib/HopSpot/Schema/PgDB/Result/User.pm $(INST_MAN3DIR)/HopSpot::Schema::PgDB::Result::User.$(MAN3EXT) \
 	  lib/HopSpot/View/HTML.pm $(INST_MAN3DIR)/HopSpot::View::HTML.$(MAN3EXT) 
 
 
@@ -850,7 +877,7 @@ $(MAKE_APERL_FILE) : $(FIRST_MAKEFILE) pm_to_blib
 TEST_VERBOSE=0
 TEST_TYPE=test_$(LINKTYPE)
 TEST_FILE = test.pl
-TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_Auth.t t/controller_Login.t t/controller_Ping.t t/controller_Portal.t t/controller_Potal.t t/controller_Protal.t
+TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_Auth.t t/controller_Login.t t/controller_Ping.t t/controller_Portal.t t/controller_Potal.t t/controller_Protal.t t/model_DBIC.t t/model_HopSpot-PgDB.t t/model_PgDB.t
 TESTDB_SW = -d
 
 testdb :: testdb_$(LINKTYPE)
@@ -885,6 +912,7 @@ ppd :
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Static::Simple" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Runtime" VERSION="5.90071" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Config::General" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DateTime::Format::Pg" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Moose::" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="namespace::autoclean" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="x86_64-linux-gnu-thread-multi-5.14" />' >> $(DISTNAME).ppd
@@ -903,6 +931,11 @@ pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	  lib/HopSpot/Controller/Ping.pm blib/lib/HopSpot/Controller/Ping.pm \
 	  lib/HopSpot/Controller/Portal.pm blib/lib/HopSpot/Controller/Portal.pm \
 	  lib/HopSpot/Controller/Root.pm blib/lib/HopSpot/Controller/Root.pm \
+	  lib/HopSpot/Model/PgDB.pm blib/lib/HopSpot/Model/PgDB.pm \
+	  lib/HopSpot/Schema/PgDB.pm blib/lib/HopSpot/Schema/PgDB.pm \
+	  lib/HopSpot/Schema/PgDB/Result/Node.pm blib/lib/HopSpot/Schema/PgDB/Result/Node.pm \
+	  lib/HopSpot/Schema/PgDB/Result/Session.pm blib/lib/HopSpot/Schema/PgDB/Result/Session.pm \
+	  lib/HopSpot/Schema/PgDB/Result/User.pm blib/lib/HopSpot/Schema/PgDB/Result/User.pm \
 	  lib/HopSpot/View/HTML.pm blib/lib/HopSpot/View/HTML.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
@@ -949,14 +982,14 @@ installdeps_notest ::
 	$(NOECHO) $(NOOP)
 
 upgradedeps ::
-	$(PERL) Makefile.PL --config= --upgradedeps=Test::More,0.88,Catalyst::Runtime,5.90071,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Moose,0,namespace::autoclean,0,Config::General,0
+	$(PERL) Makefile.PL --config= --upgradedeps=Test::More,0.88,Catalyst::Runtime,5.90071,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Moose,0,namespace::autoclean,0,Config::General,0,DateTime::Format::Pg,0
 
 upgradedeps_notest ::
-	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Test::More,0.88,Catalyst::Runtime,5.90071,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Moose,0,namespace::autoclean,0,Config::General,0
+	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Test::More,0.88,Catalyst::Runtime,5.90071,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Moose,0,namespace::autoclean,0,Config::General,0,DateTime::Format::Pg,0
 
 listdeps ::
 	@$(PERL) -le "print for @ARGV" 
 
 listalldeps ::
-	@$(PERL) -le "print for @ARGV" Test::More Catalyst::Runtime Catalyst::Plugin::ConfigLoader Catalyst::Plugin::Static::Simple Catalyst::Action::RenderView Moose namespace::autoclean Config::General
+	@$(PERL) -le "print for @ARGV" Test::More Catalyst::Runtime Catalyst::Plugin::ConfigLoader Catalyst::Plugin::Static::Simple Catalyst::Action::RenderView Moose namespace::autoclean Config::General DateTime::Format::Pg
 

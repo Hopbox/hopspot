@@ -126,13 +126,13 @@ __PACKAGE__->set_primary_key("id");
 
 Type: belongs_to
 
-Related object: L<HopSpot::Schema::PgDB::Result::Node>
+Related object: L<HopSpot::Schema::PgDB::Result::Gwcontroller>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "first_seen_gw",
-  "HopSpot::Schema::PgDB::Result::Node",
+  "HopSpot::Schema::PgDB::Result::Gwcontroller",
   { id => "first_seen_gw" },
   {
     is_deferrable => 0,
@@ -146,13 +146,13 @@ __PACKAGE__->belongs_to(
 
 Type: belongs_to
 
-Related object: L<HopSpot::Schema::PgDB::Result::Node>
+Related object: L<HopSpot::Schema::PgDB::Result::Gwcontroller>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "last_seen_gw",
-  "HopSpot::Schema::PgDB::Result::Node",
+  "HopSpot::Schema::PgDB::Result::Gwcontroller",
   { id => "last_seen_gw" },
   {
     is_deferrable => 0,
@@ -163,8 +163,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-11-11 11:23:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RpLV4YGNi3sQubqoMZviVQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-11-11 20:35:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aPtwDW7892vc1KCgnm3gRw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

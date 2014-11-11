@@ -1,12 +1,12 @@
 use utf8;
-package HopSpot::Schema::PgDB::Result::Node;
+package HopSpot::Schema::PgDB::Result::Gwcontroller;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-HopSpot::Schema::PgDB::Result::Node
+HopSpot::Schema::PgDB::Result::Gwcontroller
 
 =cut
 
@@ -30,11 +30,11 @@ extends 'DBIx::Class::Core';
 
 __PACKAGE__->load_components("InflateColumn::DateTime");
 
-=head1 TABLE: C<nodes>
+=head1 TABLE: C<gwcontrollers>
 
 =cut
 
-__PACKAGE__->table("nodes");
+__PACKAGE__->table("gwcontrollers");
 
 =head1 ACCESSORS
 
@@ -43,12 +43,12 @@ __PACKAGE__->table("nodes");
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
-  sequence: 'nodes_id_seq'
+  sequence: 'gwcontrollers_id_seq'
 
-=head2 node_id
+=head2 controller_id
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 first_seen
 
@@ -85,7 +85,8 @@ __PACKAGE__->table("nodes");
 =head2 status
 
   data_type: 'text'
-  is_nullable: 1
+  default_value: 'AUTO_CREATED_ON_PING'
+  is_nullable: 0
 
 =cut
 
@@ -95,10 +96,10 @@ __PACKAGE__->add_columns(
     data_type         => "integer",
     is_auto_increment => 1,
     is_nullable       => 0,
-    sequence          => "nodes_id_seq",
+    sequence          => "gwcontrollers_id_seq",
   },
-  "node_id",
-  { data_type => "text", is_nullable => 0 },
+  "controller_id",
+  { data_type => "text", is_nullable => 1 },
   "first_seen",
   {
     data_type     => "timestamp",
@@ -117,7 +118,11 @@ __PACKAGE__->add_columns(
   "cp_uptime",
   { data_type => "integer", is_nullable => 1 },
   "status",
-  { data_type => "text", is_nullable => 1 },
+  {
+    data_type     => "text",
+    default_value => "AUTO_CREATED_ON_PING",
+    is_nullable   => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -132,9 +137,70 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<gwcontrollers_controller_id_key>
+
+=over 4
+
+=item * L</controller_id>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("gwcontrollers_controller_id_key", ["controller_id"]);
+
+=head1 RELATIONS
+
+=head2 sessions
+
+Type: has_many
+
+Related object: L<HopSpot::Schema::PgDB::Result::Session>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sessions",
+  "HopSpot::Schema::PgDB::Result::Session",
+  { "foreign.gw_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 users_first_seen_gws
+
+Type: has_many
+
+Related object: L<HopSpot::Schema::PgDB::Result::User>
+
+=cut
+
+__PACKAGE__->has_many(
+  "users_first_seen_gws",
+  "HopSpot::Schema::PgDB::Result::User",
+  { "foreign.first_seen_gw" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 users_last_seen_gws
+
+Type: has_many
+
+Related object: L<HopSpot::Schema::PgDB::Result::User>
+
+=cut
+
+__PACKAGE__->has_many(
+  "users_last_seen_gws",
+  "HopSpot::Schema::PgDB::Result::User",
+  { "foreign.last_seen_gw" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-11-11 20:35:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Dqn8aIjz7HwDNCnPwnxpSg
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CRmGT5VV0zeA9kWhBbhuqA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

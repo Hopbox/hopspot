@@ -45,13 +45,13 @@ __PACKAGE__->config(
 
 	## Configure Cache_FastMmap
 	cache => {
-		storage => '/tmp/hopspot_otp_cache',
+		storage => '/tmp/hopspot_otp_cache_1',
 		xpires	=> 300,
 	},
 
 	'Plugin::Session' => {
 		expires	=> 900,
-		storage => '/tmp/hopspot_session',
+		storage => '/tmp/hopspot_session_1',
 	},
 
     # Disable deprecated behavior needed by old applications

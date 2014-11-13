@@ -38,6 +38,7 @@
             "Catalyst::Plugin::Static::Simple" : "0",
             "Catalyst::Runtime" : "5.90071",
             "Config::General" : "0",
+            "DateTime::Format::Pg" : "0",
             "Moose" : "0",
             "namespace::autoclean" : "0"
          }
@@ -49,5 +50,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.01"
+   "version" : "0.02"
 }

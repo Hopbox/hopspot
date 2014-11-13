@@ -55,6 +55,7 @@ sub checkotp :Path('checkotp') :Args(0) {
 	my ( $self, $c ) = @_;
 	my $req = $c->request;
 	my $gw_id 		= $req->param('gw_id');
+	my $gw_name		= 'HB' . $gw_id;
 	my $gw_address 	= $req->param('gw_address');
 	my $gw_port		= $req->param('gw_port');
 	my $mac			= $req->param('mac');
@@ -78,7 +79,15 @@ sub checkotp :Path('checkotp') :Args(0) {
 	$user_key =~ s/\:/_/g;
 
 	my $otp = $c->cache->get($user_key);
-
+	my $pgdb = $c->model('PgDB');
+	my $otpcache = $pgdb->resultset('Otpcache');
+	my $otp_rs = $otpcache->find({
+					mac		=>	$mac,
+					mobile	=>	$mobile,
+					gw_name	=>	$gw_name	
+				});
+	my $otp = $otp_rs->otp;
+	$c->log->debug("Retrieved OTP $otp from DB for $mac-$mobile-$gw_name");
 ### Generate token
 
 	my $token = md5_hex(uniqid);
@@ -107,12 +116,14 @@ sub reqotp :Path('reqotp') :Args(0) {
 	my ( $self, $c ) = @_;
 	my $req = $c->request;
 	my $gw_id 		= $req->param('gw_id');
+	my $gw_name		= 'HB' . $gw_id;
 	my $gw_address 	= $req->param('gw_address');
 	my $gw_port		= $req->param('gw_port');
 	my $mac			= $req->param('mac');
 	my $url			= $req->param('url');
 	my $mobile		= $req->param('mobile');
 	my $retry 		= $req->param('retry');
+	$retry = 0 if (!$retry);
 
 	my %template_vars;
 	$template_vars{gw_id} 		= $gw_id;
@@ -126,9 +137,26 @@ sub reqotp :Path('reqotp') :Args(0) {
 	my $user_key = $gw_id . $mac . $mobile;
 	$user_key =~ s/\:/_/g;
 
+	$c->log->debug("Searching for id of GW $gw_name");
+	my $pgdb = $c->model('PgDB');
+	my $gw_db_rs = $pgdb->resultset('Gwcontroller')->find({'controller_id' => $gw_name});
+	my $gw_db_id = $gw_db_rs->id;
+
 	my $otp = genotp($user_key, $mobile) if $retry == 0;
 
 	my $res = sendotp ($user_key, $mobile, $otp) if $retry == 0;
+
+	my $otpcache = $pgdb->resultset('Otpcache');
+	my $otp_res = $otpcache->update_or_create({
+					mac		=>	$mac,
+					mobile	=>	$mobile,
+					otp		=>	$otp,
+					url		=>	$url,
+					gw_id	=>	$gw_db_id,
+					gw_name => $gw_name,
+					resent_count => $retry,
+					last_resent_time => 'now()'
+				});
 
 	$c->cache->set($user_key, $otp);
 

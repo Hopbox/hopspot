@@ -22,7 +22,7 @@
 #     NO_META => q[1]
 #     PREREQ_PM => { namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], ExtUtils::MakeMaker=>q[6.36], Catalyst::Plugin::ConfigLoader=>q[0], Catalyst::Action::RenderView=>q[0], Test::More=>q[0.88], Config::General=>q[0], Catalyst::Runtime=>q[5.90071], Moose=>q[0], DateTime::Format::Pg=>q[0] }
 #     TEST_REQUIRES => {  }
-#     VERSION => q[0.02]
+#     VERSION => q[0.03]
 #     VERSION_FROM => q[lib/HopSpot.pm]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
@@ -65,11 +65,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = HopSpot
 NAME_SYM = HopSpot
-VERSION = 0.02
+VERSION = 0.03
 VERSION_MACRO = VERSION
-VERSION_SYM = 0_02
+VERSION_SYM = 0_03
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 0.02
+XS_VERSION = 0.03
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -180,6 +180,7 @@ MAN3PODS = lib/HopSpot.pm \
 	lib/HopSpot/Controller/Portal.pm \
 	lib/HopSpot/Controller/Root.pm \
 	lib/HopSpot/Model/PgDB.pm \
+	lib/HopSpot/Schema/PgDB/Result/Gwcontroller.pm \
 	lib/HopSpot/Schema/PgDB/Result/Node.pm \
 	lib/HopSpot/Schema/PgDB/Result/Session.pm \
 	lib/HopSpot/Schema/PgDB/Result/User.pm \
@@ -213,6 +214,7 @@ TO_INST_PM = lib/HopSpot.pm \
 	lib/HopSpot/Controller/Root.pm \
 	lib/HopSpot/Model/PgDB.pm \
 	lib/HopSpot/Schema/PgDB.pm \
+	lib/HopSpot/Schema/PgDB/Result/Gwcontroller.pm \
 	lib/HopSpot/Schema/PgDB/Result/Node.pm \
 	lib/HopSpot/Schema/PgDB/Result/Session.pm \
 	lib/HopSpot/Schema/PgDB/Result/User.pm \
@@ -234,6 +236,8 @@ PM_TO_BLIB = lib/HopSpot.pm \
 	blib/lib/HopSpot/Model/PgDB.pm \
 	lib/HopSpot/Schema/PgDB.pm \
 	blib/lib/HopSpot/Schema/PgDB.pm \
+	lib/HopSpot/Schema/PgDB/Result/Gwcontroller.pm \
+	blib/lib/HopSpot/Schema/PgDB/Result/Gwcontroller.pm \
 	lib/HopSpot/Schema/PgDB/Result/Node.pm \
 	blib/lib/HopSpot/Schema/PgDB/Result/Node.pm \
 	lib/HopSpot/Schema/PgDB/Result/Session.pm \
@@ -311,7 +315,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = HopSpot
-DISTVNAME = HopSpot-0.02
+DISTVNAME = HopSpot-0.03
 
 
 # --- MakeMaker macro section:
@@ -471,6 +475,7 @@ manifypods : pure_all  \
 	lib/HopSpot/Controller/Portal.pm \
 	lib/HopSpot/Controller/Root.pm \
 	lib/HopSpot/Model/PgDB.pm \
+	lib/HopSpot/Schema/PgDB/Result/Gwcontroller.pm \
 	lib/HopSpot/Schema/PgDB/Result/Node.pm \
 	lib/HopSpot/Schema/PgDB/Result/Session.pm \
 	lib/HopSpot/Schema/PgDB/Result/User.pm \
@@ -494,6 +499,7 @@ manifypods : pure_all  \
 	  lib/HopSpot/Controller/Portal.pm $(INST_MAN3DIR)/HopSpot::Controller::Portal.$(MAN3EXT) \
 	  lib/HopSpot/Controller/Root.pm $(INST_MAN3DIR)/HopSpot::Controller::Root.$(MAN3EXT) \
 	  lib/HopSpot/Model/PgDB.pm $(INST_MAN3DIR)/HopSpot::Model::PgDB.$(MAN3EXT) \
+	  lib/HopSpot/Schema/PgDB/Result/Gwcontroller.pm $(INST_MAN3DIR)/HopSpot::Schema::PgDB::Result::Gwcontroller.$(MAN3EXT) \
 	  lib/HopSpot/Schema/PgDB/Result/Node.pm $(INST_MAN3DIR)/HopSpot::Schema::PgDB::Result::Node.$(MAN3EXT) \
 	  lib/HopSpot/Schema/PgDB/Result/Session.pm $(INST_MAN3DIR)/HopSpot::Schema::PgDB::Result::Session.$(MAN3EXT) \
 	  lib/HopSpot/Schema/PgDB/Result/User.pm $(INST_MAN3DIR)/HopSpot::Schema::PgDB::Result::User.$(MAN3EXT) \
@@ -933,6 +939,7 @@ pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	  lib/HopSpot/Controller/Root.pm blib/lib/HopSpot/Controller/Root.pm \
 	  lib/HopSpot/Model/PgDB.pm blib/lib/HopSpot/Model/PgDB.pm \
 	  lib/HopSpot/Schema/PgDB.pm blib/lib/HopSpot/Schema/PgDB.pm \
+	  lib/HopSpot/Schema/PgDB/Result/Gwcontroller.pm blib/lib/HopSpot/Schema/PgDB/Result/Gwcontroller.pm \
 	  lib/HopSpot/Schema/PgDB/Result/Node.pm blib/lib/HopSpot/Schema/PgDB/Result/Node.pm \
 	  lib/HopSpot/Schema/PgDB/Result/Session.pm blib/lib/HopSpot/Schema/PgDB/Result/Session.pm \
 	  lib/HopSpot/Schema/PgDB/Result/User.pm blib/lib/HopSpot/Schema/PgDB/Result/User.pm \

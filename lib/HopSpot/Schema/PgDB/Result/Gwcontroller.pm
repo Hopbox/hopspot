@@ -153,6 +153,21 @@ __PACKAGE__->add_unique_constraint("gwcontrollers_controller_id_key", ["controll
 
 =head1 RELATIONS
 
+=head2 otpcaches
+
+Type: has_many
+
+Related object: L<HopSpot::Schema::PgDB::Result::Otpcache>
+
+=cut
+
+__PACKAGE__->has_many(
+  "otpcaches",
+  "HopSpot::Schema::PgDB::Result::Otpcache",
+  { "foreign.gw_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sessions
 
 Type: has_many
@@ -199,8 +214,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-11-11 20:35:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CRmGT5VV0zeA9kWhBbhuqA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-11-12 13:14:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gz2vBFZ39ZFhsWZU9H1xuQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

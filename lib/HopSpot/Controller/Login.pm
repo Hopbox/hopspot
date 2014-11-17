@@ -58,6 +58,7 @@ sub checkotp :Path('checkotp') :Args(0) {
 	my $gw_name		= 'HB' . $gw_id;
 	my $gw_address 	= $req->param('gw_address');
 	my $gw_port		= $req->param('gw_port');
+	   $gw_port =~ tr/\\//;
 	my $mac			= $req->param('mac');
 	my $url			= $req->param('url');
 	my $mobile		= $req->param('mobile');
@@ -73,30 +74,23 @@ sub checkotp :Path('checkotp') :Args(0) {
 	$template_vars{mobile}		= $mobile;
 	$template_vars{retry}		= $retry + 1;
 
-	#print "##### Retrieving from session\n";
-
-	my $user_key = $gw_id . $mac . $mobile;
-	$user_key =~ s/\:/_/g;
-
-	my $otp = $c->cache->get($user_key);
 	my $pgdb = $c->model('PgDB');
 	my $otpcache = $pgdb->resultset('Otpcache');
-	my $otp_rs = $otpcache->find({
+	my $otp_rs = $otpcache->search({
 					mac		=>	$mac,
 					mobile	=>	$mobile,
 					gw_name	=>	$gw_name	
-				});
-	my $otp = $otp_rs->otp;
+				})->single;
+	my $otp = $otp_rs->otp if $otp_rs;
 	$c->log->debug("Retrieved OTP $otp from DB for $mac-$mobile-$gw_name");
-### Generate token
-
-	my $token = md5_hex(uniqid);
-    #print "*********** TOKEN $token \n";
 
 	if ($otp eq $rcvd_otp){
-		#print "#### OTP from cache is $otp. RCVD OTP is $rcvd_otp\n";
+		my $token = md5_hex(uniqid);
+    	$c->log->debug("Generated Session TOKEN $token");
+		$c->log->debug("OTP from cache is $otp. RCVD OTP is $rcvd_otp");
 		$gw_port =~ tr/\\//;
 		my $redir_url = "http://$gw_address:$gw_port/wifidog/auth?token=$token" . '&' . "url=$url";
+		$c->log->debug("Redirecting user to $redir_url");
 		$c->response->redirect($redir_url, 302);
 	}
 	else {
@@ -134,20 +128,35 @@ sub reqotp :Path('reqotp') :Args(0) {
 	$template_vars{mobile}		= $mobile;
 	$template_vars{retry}		= $retry + 1;
 
-	my $user_key = $gw_id . $mac . $mobile;
-	$user_key =~ s/\:/_/g;
-
 	$c->log->debug("Searching for id of GW $gw_name");
 	my $pgdb = $c->model('PgDB');
 	my $gw_db_rs = $pgdb->resultset('Gwcontroller')->find({'controller_id' => $gw_name});
 	my $gw_db_id = $gw_db_rs->id;
 
-	my $otp = genotp($user_key, $mobile) if $retry == 0;
-
-	my $res = sendotp ($user_key, $mobile, $otp) if $retry == 0;
+	my $otp = genotp($mobile) if $retry == 0;
+	my $res = sendotp ($mobile, $otp) if $retry == 0;
 
 	my $otpcache = $pgdb->resultset('Otpcache');
-	my $otp_res = $otpcache->update_or_create({
+	### Check if MAC-MOBILE-IP tuple exist in OTP Cache
+	my $otp_rs = $otpcache->search({
+					mac		=>	$mac,
+					mobile	=>	$mobile,
+					gw_id	=>	$gw_db_id
+					})->single;
+	if($otp_rs != 0){
+		$c->log->debug("Found OTP entry for $mac, $mobile, $gw_name. Updating new OTP $otp on id " . $otp_rs->id);
+		my $otp_up = $otp_rs->update({
+					mac		=>	$mac,
+					mobile	=>	$mobile,
+					otp		=>	$otp,
+					url		=>	$url,
+					resent_count => $retry,
+					last_resent_time => 'now()'
+					});
+	}
+	else{
+		$c->log->debug("OTP entry not found. Creating one for $mac, $mobile, $otp, $gw_name");
+		my $otp_cr = $otpcache->create({
 					mac		=>	$mac,
 					mobile	=>	$mobile,
 					otp		=>	$otp,
@@ -157,10 +166,9 @@ sub reqotp :Path('reqotp') :Args(0) {
 					resent_count => $retry,
 					last_resent_time => 'now()'
 				});
+	}
 
-	$c->cache->set($user_key, $otp);
-
-	#print "SMS SEND Result is $res <<<<<<<<<<<<<<<<<<<<<<<<<\n";
+	$c->log->debug("SMS SEND Result is $res");
 
 	my $submit_url = "checkotp";
 
@@ -178,7 +186,6 @@ sub genotp :Private {
 	use Digest::MD5 qw (md5_hex);
 	use Data::Uniqid qw (suniqid uniqid luniqid);
 
-	my $user_key = shift;
 	my $mobile = shift;
 
 	### Generating a 6 digit random number string
@@ -190,7 +197,7 @@ sub genotp :Private {
 	    $otp .= $digits[int rand @digits];
 	}
 
-	#print "****** Generated OTP is $otp for USER_KEY $user_key ...\n";
+	#$c->log->debug("Generated OTP is $otp for $mobile");
 	return $otp;
 }
 
@@ -205,7 +212,6 @@ sub sendotp :Private {
 	$ua->cookie_jar({});
 	$ua->ssl_opts('verify_hostname' => 0);
 
-	my $user_key = shift;
 	my $mobile = shift;
 	my $otp = shift;
 
@@ -219,7 +225,7 @@ sub sendotp :Private {
 	my $sms_url = 'https://control.msg91.com/api/sendhttp.php?authkey=' . $apikey . '&mobiles=' . $mobile;
 	$sms_url .= '&message=' . $msg . '&sender=' . $sender . '&route=' . $route;
 
-	#print "************* SMS URL is $sms_url\n";
+	#$c->log->debug("SMS URL is $sms_url");
 
 	#### Currently Fire and Forget
 	my $sms_res = $ua->get("$sms_url")->content;

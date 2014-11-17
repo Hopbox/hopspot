@@ -28,6 +28,7 @@ lib/HopSpot/Model/PgDB.pm
 lib/HopSpot/Schema/PgDB.pm
 lib/HopSpot/Schema/PgDB/Result/Gwcontroller.pm
 lib/HopSpot/Schema/PgDB/Result/Node.pm
+lib/HopSpot/Schema/PgDB/Result/Otpcache.pm
 lib/HopSpot/Schema/PgDB/Result/Session.pm
 lib/HopSpot/Schema/PgDB/Result/User.pm
 lib/HopSpot/View/HTML.pm

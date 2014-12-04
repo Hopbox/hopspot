@@ -75,6 +75,10 @@ sub index :Path :Args(0) {
 	    $c->response->body('Auth: 1');
 	}
 	if ($stage eq 'counters') {
+# Check if total bytes used cross the daily limit
+# Check if status is set to lock or force logout the user
+# 
+#
 		$c->response->body('Auth: 1');
 	}
 	if ($stage eq 'logout') {

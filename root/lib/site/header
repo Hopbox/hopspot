@@ -1,4 +1,4 @@
 <!-- BEGIN site/header -->
 <!-- <h1 class="title">[% template.title or site.title %]</h1> -->
-<img src="/static/images/logo.png">
+<img src="/static/images/[% gw_id %].png">
 <!-- END site/header -->

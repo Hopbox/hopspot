@@ -3,6 +3,7 @@ HopSpot-0.02.tar.gz
 HopSpot-0.03.tar.gz
 hopspot.conf
 hopspot.psgi
+hopspot.sql
 inc/File/Copy/Recursive.pm
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
@@ -74,6 +75,8 @@ root/static/fonts/glyphicons-halflings-regular.eot
 root/static/fonts/glyphicons-halflings-regular.svg
 root/static/fonts/glyphicons-halflings-regular.ttf
 root/static/fonts/glyphicons-halflings-regular.woff
+root/static/images/000DB93404A8.png
+root/static/images/4C5E0C7B2179.png
 root/static/images/btn_120x50_built.png
 root/static/images/btn_120x50_built_shadow.png
 root/static/images/btn_120x50_powered.png
@@ -84,6 +87,7 @@ root/static/images/btn_88x31_powered.png
 root/static/images/btn_88x31_powered_shadow.png
 root/static/images/catalyst_logo.png
 root/static/images/logo.png
+root/static/images/vmart_big_logo.png
 root/static/js/bootstrap.js
 root/static/js/bootstrap.min.js
 root/static/js/html5shiv.min.js
